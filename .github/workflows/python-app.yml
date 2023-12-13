@@ -1,0 +1,50 @@
+name: Python application
+
+on:
+  schedule:
+    - cron: "0 */3 * * 1-5" # Run every 3 hours on weekdays (Monday to Friday) in CST
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Check if stock market is open
+      id: market-check
+      run: |
+        current_hour=$(TZ="America/Chicago" date +"%H")
+        if [ "$current_hour" -ge 9 ] && [ "$current_hour" -lt 16 ]; then
+          echo "::set-output name=market-open::true"
+        else
+          echo "::set-output name=market-open::false"
+        fi
+      shell: bash
+    - name: Lint with flake8
+      if: steps.market-check.outputs.market-open == 'true'
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Test with pytest
+      if: steps.market-check.outputs.market-open == 'true'
+      run: |
+        pytest
