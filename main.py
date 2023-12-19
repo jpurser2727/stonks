@@ -1,12 +1,9 @@
 import requests
 from alpaca.trading.client import TradingClient
+from alpaca.trading.requests import MarketOrderRequest
+from alpaca.trading.enums import OrderSide, TimeInForce
 
-# Set up your Alpaca API credentials
-ALPACA_API_KEY = 'PKZ9FFDTB1MJGB2J8BT3'
-ALPACA_SECRET_KEY = 'KOP9jOMhyfwrs5dKlPrD9yM9knBbkmfldW8kVK1O'
-
-# Initialize the Alpaca trading client for paper trading
-trading_client = TradingClient(ALPACA_API_KEY, ALPACA_SECRET_KEY, paper=True)
+trading_client = TradingClient('PKY2FY5HR5X7S7BUSHXV', 'lzAK9gwJ7M1eaAKT1teXt71YbqHxIYkKcbvwMj7y', paper=True)
 
 # Define the ISS location API endpoint
 def get_iss_longitude():
@@ -32,40 +29,39 @@ def main():
             trading_client.submit_order(
                 symbol='LMT',
                 qty=5,
-                side='buy',
-                type='market',
+                side=OrderSide.BUY,
                 time_in_force='gtc'
             )
             myDict['LMT'] += 5
         elif -40 < iss_longitude <= -20:
             # Sell 2 shares of Lockheed Martin stock
+            print("working")
             if myDict['LMT'] >= 2:
                 trading_client.submit_order(
                     symbol='LMT',
                     qty=2,
-                    side='sell',
-                    type='market',
+                    side=OrderSide.BUY,
                     time_in_force='gtc'
                 )
                 myDict['LMT'] -= 2
         elif -20 < iss_longitude <= 0:
+            print("working")
             # Buy 5 shares of Home Depot stock
             trading_client.submit_order(
                 symbol='HD',
                 qty=5,
-                side='buy',
-                type='market',
+                side=OrderSide.BUY,
                 time_in_force='gtc'
             )
             myDict['HD'] += 5
         elif 0 < iss_longitude <= 20:
+            print("working")
             # Sell 2 shares of Home Depot stock
             if myDict['HD'] >= 2:
                 trading_client.submit_order(
                     symbol='HD',
                     qty=2,
-                    side='sell',
-                    type='market',
+                    side=OrderSide.BUY,
                     time_in_force='gtc'
                 )
                 myDict['HD'] -= 2
@@ -75,8 +71,7 @@ def main():
             trading_client.submit_order(
                 symbol='LMT',
                 qty=2,
-                side='buy',
-                type='market',
+                side=OrderSide.BUY,
                 time_in_force='gtc'
             )
             myDict['LMT'] += 2
