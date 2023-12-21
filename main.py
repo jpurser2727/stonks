@@ -3,7 +3,7 @@ from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
 import requests
 
-trading_client = TradingClient('PKJRQDHAA82UJPBWC0AR', 'SteCp5qIF7hWv35F0hIcLOJV1mC0NCaCEjshM3ss', paper=True)
+trading_client = TradingClient('PKMQGYGTKMC12SFWTN3I', 'F76bIs9ivEObpks1gcb6wHa00AqxsEfXTcMZmDkC', paper=True)
 
 # Define the ISS location API endpoint
 def get_iss_longitude():
@@ -92,6 +92,19 @@ def main():
             symbol="LMT",
             qty=2,
             side=OrderSide.BUY,
+            time_in_force=TimeInForce.DAY
+        )
+        market_order = trading_client.submit_order(
+            order_data=market_order_data
+        )
+    elif iss_longitude >=100:
+        print("working")
+        # Buy 2 shares of Lockheed Martin stock
+        print("working")
+        market_order_data = MarketOrderRequest(
+            symbol="LMT",
+            qty=2,
+            side=OrderSide.SELL,
             time_in_force=TimeInForce.DAY
         )
         market_order = trading_client.submit_order(
