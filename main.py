@@ -5,6 +5,7 @@ import requests
 
 trading_client = TradingClient('PKMQGYGTKMC12SFWTN3I', 'F76bIs9ivEObpks1gcb6wHa00AqxsEfXTcMZmDkC', paper=True)
 
+
 # Define the ISS location API endpoint
 def get_iss_longitude():
     url = "http://api.open-notify.org/iss-now.json"
@@ -13,7 +14,11 @@ def get_iss_longitude():
     return float(data['iss_position']['longitude'])
 
 # Initialize a dictionary to keep track of stock holdings
-
+myDict = {
+    "LMT": (-10000, -40),  
+    "HD": (-40, 20),    
+    "LMT": (20, 10000) 
+}
 def main():
     iss_longitude = get_iss_longitude()
     print(get_iss_longitude())
